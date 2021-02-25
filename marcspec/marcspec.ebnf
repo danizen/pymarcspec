@@ -18,7 +18,7 @@ alphalower        = /[a-z]/ ;
 
 digit             = /[0-9]/ ;
 
-vchar             = /[:print:]/ ;
+vchar             = /[a-z0-9A-Z?\-_]/ ;
 
 positiveDigit     = /[1-9]/ ;
 
@@ -58,7 +58,7 @@ INDICATOR::int = "1" | "2" ;
 indicatorSpec
      = tag:fieldTag [index:INDEX] "^" ind:INDICATOR ;
 
-comparisonString  = "\" ~ {vchar} ;
+comparisonString  = "\" ~ /[a-z0-9A-Z?\-_]*/ ;
 
 # equal | unequal | includes | not includes | not exists | exists
 

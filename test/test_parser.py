@@ -106,13 +106,19 @@ def test_subfield_range(marcspec_parser):
 
 
 def test_subfield_with_subspec_field(marcspec_parser):
-    ast = marcspec_parser.parse('650$a{650^2=\\2}')
+    ast = marcspec_parser.parse('650$a{650^2=\\toolong}')
     assert ast.field is None
     assert ast.inds is None
     assert ast.data[0].tag == '650'
     assert ast.data[0].codes.code.code == 'a'
     assert ast.data[2] == []
-    assert ast.data[1][0] == 'fubar'
+    assert len(ast.data[1][0].terms) == 1
+
+    term = ast.data[1][0].terms[0]
+    assert term.op == '='
+    assert term.left.inds.tag == '650'
+    assert term.left.inds.ind == '2'
+    assert term.right.cmp[1] == 'toolong'
 
 
 def test_subfield_with_subspec_subfieldabbr_biop(marcspec_parser):
