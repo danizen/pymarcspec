@@ -1,0 +1,4 @@
+-r requirements.txt
+
+ipython==7.0.1			# works on windows
+

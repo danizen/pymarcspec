@@ -1,0 +1,97 @@
+# This is used to generate the file loader/parser.py using tatsu.
+# tatsu is a "compiler compiler" and this is a form of EBNF
+#
+# This is translated from ABNF to TaTsu's EBNF.
+# The source of the grammar is http://marcspec.github.io/MARCspec/marc-spec.html
+
+@@grammar::MarcSpec
+
+#
+# This is to assure that grammars requiring left recursion will fail
+#
+
+@@left_recursion::False
+
+alphaupper        = /[A-Z]/ ;
+
+alphalower        = /[a-z]/ ;
+
+digit             = /[0-9]/ ;
+
+vchar             = /[:print:]/ ;
+
+positiveDigit     = /[1-9]/ ;
+
+positiveInt       = /[0-9]+/ ;
+
+fieldTag          = /[a-z0-9\.]{3}/ | /[A-z0-9\.]{3}/ ;
+
+position          = positiveInt | "#" ;
+
+range             = start:position "-" ~ end:position ;
+
+positionOrRange   = range:range | pos:position ;
+
+CHARSPEC          = "/" ~ positionOrRange ;
+
+INDEX             = "[" positionOrRange "]" ;
+
+fieldSpec         = tag:fieldTag [index:INDEX] [cspec:CHARSPEC] ;
+
+abrFieldSpec      = index:INDEX [cspec:CHARSPEC] | cspec:CHARSPEC ;
+
+#  originally - ! " # $ % & ' ( ) * + , - . / 0-9 : ; < = > ? [ \ ] ^ _ \` a-z { } ~
+subfieldChar      = /[a-z0-9]/ ;
+
+subfieldCode      = "$" code:subfieldChar ;
+
+subfieldRange     = "$" start:subfieldChar "-" end:subfieldChar ;
+
+abrSubfieldSpec
+    = (range:subfieldRange | code:subfieldCode ) [index:INDEX] [cspec:CHARSPEC] ;
+
+subfieldSpec
+    = tag:fieldTag [index:INDEX] codes:abrSubfieldSpec ;
+
+INDICATOR::int = "1" | "2" ;
+
+indicatorSpec
+     = tag:fieldTag [index:INDEX] "^" ind:INDICATOR ;
+
+comparisonString  = "\" ~ {vchar} ;
+
+# equal | unequal | includes | not includes | not exists | exists
+
+operator          = "=" | "!="  | "~" | "!~" | "!" | "?" ;
+
+abbreviation
+    =
+    | [index:INDEX] "^" ind:INDICATOR
+    | data:abrSubfieldSpec
+    | field:abrFieldSpec
+    ;
+
+subTerm
+    =
+    | cmp:comparisonString
+    | inds:indicatorSpec
+    | data:subfieldSpec
+    | field:fieldSpec
+    | abr:abbreviation
+    ;
+
+subTermSet        = [ [left:subTerm] op:operator ] right:subTerm ;
+
+subSpec
+    =  "{" terms:"|".{subTermSet} "}" ;
+
+marcSpec
+    =
+    | inds:indicatorSpec subspec:{subSpec}
+    | data:(subfieldSpec subspec:{subSpec} abrspec:{(abrSubfieldSpec subspec:{subSpec})} )
+    | field:fieldSpec subspecs:{subSpec}
+    ;
+
+# | subfields:(subfieldSpec subspec+:{subSpec} abrspec+:{(abrSubfieldSpec subspec+:{subSpec})} )
+
+start = marcSpec $ ;
