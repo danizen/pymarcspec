@@ -20,7 +20,8 @@ alphalower        = /[a-z]/ ;
 
 digit             = /[0-9]/ ;
 
-vchar             = /[a-z0-9A-Z?\-_]/ ;
+# for documentation only - not used directly
+vchar             = /[\x21-\x7a]/ ;
 
 positiveDigit     = /[1-9]/ ;
 
@@ -60,7 +61,7 @@ INDICATOR::int = "1" | "2" ;
 indicatorSpec
      = tag:fieldTag [index:INDEX] "^" ind:INDICATOR ;
 
-comparisonString  = "\" ~ /[a-z0-9A-Z?\-_]*/ ;
+comparisonString  = "\" ~ /[\x21-\x7a]*/ ;
 
 # equal | unequal | includes | not includes | not exists | exists
 

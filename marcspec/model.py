@@ -52,3 +52,19 @@ class IndicatorSpec:
     tag = attr.ib()
     indicator = attr.ib()
     index = attr.ib(default=None)
+
+
+@attr.s(frozen=True)
+class ComparisonCondition:
+    pass
+
+@attr.s(frozen=True)
+class ConditionalSpec:
+    terms = attr.ib()
+
+
+@attr.s(frozen=True)
+class DataSpec:
+    tag = attr.ib()
+    subfields = attr.ib()
+    subspec = attr.ib()

@@ -99,7 +99,7 @@ class MarcSpecParser(Parser):
 
     @tatsumasu()
     def _vchar_(self):  # noqa
-        self._pattern('[a-z0-9A-Z?\\-_]')
+        self._pattern('[\\x21-\\x7a]')
 
     @tatsumasu()
     def _positiveDigit_(self):  # noqa
@@ -291,7 +291,7 @@ class MarcSpecParser(Parser):
     def _comparisonString_(self):  # noqa
         self._token('\\')
         self._cut()
-        self._pattern('[a-z0-9A-Z?\\-_]*')
+        self._pattern('[\\x21-\\x7a]*')
 
     @tatsumasu()
     def _operator_(self):  # noqa
