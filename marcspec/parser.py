@@ -398,33 +398,30 @@ class MarcSpecParser(Parser):
                 with self._group():
                     self._subfieldSpec_()
 
-                    def block5():
+                    def block4():
                         self._subSpec_()
-                    self._closure(block5)
-                    self.name_last_node('subspec')
+                    self._closure(block4)
 
-                    def block7():
+                    def block5():
                         with self._group():
                             self._abrSubfieldSpec_()
 
-                            def block9():
+                            def block6():
                                 self._subSpec_()
-                            self._closure(block9)
-                            self.name_last_node('subspec')
-                    self._closure(block7)
-                    self.name_last_node('abrspec')
+                            self._closure(block6)
+                    self._closure(block5)
                 self.name_last_node('data')
             with self._option():
                 self._fieldSpec_()
                 self.name_last_node('field')
 
-                def block12():
+                def block9():
                     self._subSpec_()
-                self._closure(block12)
+                self._closure(block9)
                 self.name_last_node('subspec')
             self._error('no available options')
         self.ast._define(
-            ['abrspec', 'data', 'field', 'inds', 'subspec'],
+            ['data', 'field', 'inds', 'subspec'],
             []
         )
 

@@ -88,7 +88,7 @@ subSpec
 marcSpec
     =
     | inds:indicatorSpec subspec:{subSpec}
-    | data:(subfieldSpec subspec:{subSpec} abrspec:{(abrSubfieldSpec subspec:{subSpec})} )
+    | data:(subfieldSpec {subSpec} {(abrSubfieldSpec {subSpec})} )
     | field:fieldSpec subspec:{subSpec}
     ;
 
