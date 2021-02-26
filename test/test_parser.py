@@ -52,6 +52,18 @@ def test_fieldspec_index_range(marcspec_parser):
     assert ast.inds is None
 
 
+def test_fieldspec_subspec_abr(marcspec_parser):
+    ast = marcspec_parser.parse('880/1-4{/0=\\2}')
+    assert ast.field.tag == '880'
+    assert ast.field.cspec[1].range.start == '1'
+    assert ast.field.cspec[1].range.end == '4'
+    assert len(ast.subspec[0].terms) == 1
+
+    term = ast.subspec[0].terms[0]
+    assert term.left.abr.field.cspec[1].pos == '0'
+    assert term.op == '='
+
+
 def test_inds_spec(marcspec_parser):
     ast = marcspec_parser.parse('264^1')
     assert ast.inds.tag == '264'

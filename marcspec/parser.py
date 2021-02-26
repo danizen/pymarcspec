@@ -421,10 +421,10 @@ class MarcSpecParser(Parser):
                 def block12():
                     self._subSpec_()
                 self._closure(block12)
-                self.name_last_node('subspecs')
+                self.name_last_node('subspec')
             self._error('no available options')
         self.ast._define(
-            ['abrspec', 'data', 'field', 'inds', 'subspec', 'subspecs'],
+            ['abrspec', 'data', 'field', 'inds', 'subspec'],
             []
         )
 
