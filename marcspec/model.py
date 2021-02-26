@@ -58,6 +58,7 @@ class IndicatorSpec:
 class ComparisonCondition:
     pass
 
+
 @attr.s(frozen=True)
 class ConditionalSpec:
     terms = attr.ib()
