@@ -1,7 +1,6 @@
 import pytest
 
 from tatsu.exceptions import FailedParse
-from marcspec.parser import MarcSpecParser
 
 
 def test_fieldspec_tag(marcspec_parser):
