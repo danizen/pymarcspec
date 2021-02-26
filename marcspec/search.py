@@ -2,14 +2,14 @@
 Logic to search a pymarc.Record based on a compiled MarcSpec AST or object
 """
 from .parser import MarcSpecParser
-from .builder import MarcSpecSemantics
+from .semantics import MarcSearchSemantics
 
 
 # memoize compiling of strings into AST using some searcher
 class MarcSpecSearch:
 
     def __init__(self):
-        self.parser = MarcSpecParser(semantics=MarcSpecSemantics())
+        self.parser = MarcSpecParser(semantics=MarcSearchSemantics())
         self.specs = dict()
 
     def _spec(self, marcspec):

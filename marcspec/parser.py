@@ -273,6 +273,19 @@ class MarcSpecParser(Parser):
             self._error('no available options')
 
     @tatsumasu()
+    def _abrIndicatorSpec_(self):  # noqa
+        with self._optional():
+            self._INDEX_()
+            self.name_last_node('index')
+        self._token('^')
+        self._INDICATOR_()
+        self.name_last_node('ind')
+        self.ast._define(
+            ['ind', 'index'],
+            []
+        )
+
+    @tatsumasu()
     def _indicatorSpec_(self):  # noqa
         self._fieldTag_()
         self.name_last_node('tag')
@@ -314,12 +327,8 @@ class MarcSpecParser(Parser):
     def _abbreviation_(self):  # noqa
         with self._choice():
             with self._option():
-                with self._optional():
-                    self._INDEX_()
-                    self.name_last_node('index')
-                self._token('^')
-                self._INDICATOR_()
-                self.name_last_node('ind')
+                self._abrIndicatorSpec_()
+                self.name_last_node('inds')
             with self._option():
                 self._abrSubfieldSpec_()
                 self.name_last_node('data')
@@ -328,7 +337,7 @@ class MarcSpecParser(Parser):
                 self.name_last_node('field')
             self._error('no available options')
         self.ast._define(
-            ['data', 'field', 'ind', 'index'],
+            ['data', 'field', 'inds'],
             []
         )
 
@@ -493,6 +502,9 @@ class MarcSpecSemantics(object):
         return ast
 
     def INDICATOR(self, ast):  # noqa
+        return ast
+
+    def abrIndicatorSpec(self, ast):  # noqa
         return ast
 
     def indicatorSpec(self, ast):  # noqa

@@ -58,6 +58,9 @@ subfieldSpec
 
 INDICATOR::int = "1" | "2" ;
 
+abrIndicatorSpec
+    = [index:INDEX] "^" ind:INDICATOR ;
+
 indicatorSpec
      = tag:fieldTag [index:INDEX] "^" ind:INDICATOR ;
 
@@ -69,7 +72,7 @@ operator          = "=" | "!="  | "~" | "!~" | "!" | "?" ;
 
 abbreviation
     =
-    | [index:INDEX] "^" ind:INDICATOR
+    | inds:abrIndicatorSpec
     | data:abrSubfieldSpec
     | field:abrFieldSpec
     ;
@@ -91,6 +94,6 @@ subSpec
 marcSpec
     =
     | inds:indicatorSpec subspec:{subSpec}
-    | data:(subfieldSpec {subSpec} {(abrSubfieldSpec {subSpec})} )
+    | data:(subfieldSpec {subSpec} {(abrSubfieldSpec {subSpec})})
     | field:fieldSpec subspec:{subSpec}
     ;

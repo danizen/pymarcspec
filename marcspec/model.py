@@ -28,10 +28,7 @@ class AbrSubfieldSpec:
 @attr.s(frozen=True)
 class SubfieldSpec:
     tag = attr.ib()
-    start = attr.ib()
-    end = attr.ib(default=None)
-    cspec = attr.ib(default=None)
-    index = attr.ib(default=None)
+    subfields = attr.ib()
 
 
 @attr.s(frozen=True)
@@ -55,13 +52,27 @@ class IndicatorSpec:
 
 
 @attr.s(frozen=True)
-class ComparisonCondition:
-    pass
+class AbrIndicatorSpec:
+    indicator = attr.ib()
+    index = attr.ib(default=None)
 
 
 @attr.s(frozen=True)
-class ConditionalSpec:
-    terms = attr.ib()
+class StringCompare:
+    value = attr.ib()
+
+
+@attr.s(frozen=True)
+class ConditionTerm:
+    op = attr.ib()
+    right = attr.ib()
+    left = attr.ib(default=None)
+
+
+@attr.s(frozen=True)
+class ConditionExpr:
+    any = attr.ib(default=None)
+    all = attr.ib(default=None)
 
 
 @attr.s(frozen=True)
@@ -69,3 +80,14 @@ class DataSpec:
     tag = attr.ib()
     subfields = attr.ib()
     subspec = attr.ib()
+
+
+@attr.s(frozen=True)
+class MarcSpec:
+    FIELD = 1
+    INDICATOR = 2
+    VARDATA = 3
+
+    type = attr.ib(type=int)
+    value = attr.ib()
+    conditions = attr.ib(default=None)
