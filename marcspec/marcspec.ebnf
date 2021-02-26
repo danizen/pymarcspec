@@ -12,6 +12,8 @@
 
 @@left_recursion::False
 
+start = marcSpec $ ;
+
 alphaupper        = /[A-Z]/ ;
 
 alphalower        = /[a-z]/ ;
@@ -91,5 +93,3 @@ marcSpec
     | data:(subfieldSpec {subSpec} {(abrSubfieldSpec {subSpec})} )
     | field:fieldSpec subspec:{subSpec}
     ;
-
-start = marcSpec $ ;

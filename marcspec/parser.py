@@ -81,6 +81,11 @@ class MarcSpecParser(Parser):
         )
 
     @tatsumasu()
+    def _start_(self):  # noqa
+        self._marcSpec_()
+        self._check_eof()
+
+    @tatsumasu()
     def _alphaupper_(self):  # noqa
         self._pattern('[A-Z]')
 
@@ -425,13 +430,11 @@ class MarcSpecParser(Parser):
             []
         )
 
-    @tatsumasu()
-    def _start_(self):  # noqa
-        self._marcSpec_()
-        self._check_eof()
-
 
 class MarcSpecSemantics(object):
+    def start(self, ast):  # noqa
+        return ast
+
     def alphaupper(self, ast):  # noqa
         return ast
 
@@ -516,13 +519,10 @@ class MarcSpecSemantics(object):
     def marcSpec(self, ast):  # noqa
         return ast
 
-    def start(self, ast):  # noqa
-        return ast
-
 
 def main(filename, start=None, **kwargs):
     if start is None:
-        start = 'alphaupper'
+        start = 'start'
     if not filename or filename == '-':
         text = sys.stdin.read()
     else:
