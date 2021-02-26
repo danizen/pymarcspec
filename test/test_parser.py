@@ -173,11 +173,48 @@ def test_subfield_with_subspec_subfield_unop(marcspec_parser):
 
 
 @pytest.mark.parametrize('pattern', [
-    "880",
+    'LDR',              # match the leader
+    '00.',              # match all control fields
+    '7..',              # match all 7xx fields
+    '100',              # match specifically the datafields with tag==100
+    'LDR/0-4',          # first five characters of the leader
+    'LDR/6',            # The 7th character from the level (0-based)
+    '007/0',            # 1st character from 007 control field
+    '007/1-#',          # all characters but first in the 007
+    '007/#',            # last character in the 007 field
+    '245$a',            # Each $a subfield of each 245
+    '245$a/#-1',        # last 2 characters of each 245$a
+    '245$a$b$c',        # each subfield $a, $b, and $c of each 245
+    '245$a-c',          # subfields $a through $c of each 245
+    '245$a-c$e-f',
+    '300[0]',           # 1st occurrence of 300
+    '300[1]',           # 2nd occurrence of 300
+    '300[0-2]',         # 1st, 2nd, and 3rd occurrence of 300
+    '300[1-#]',         # All but the first 300
+    '300[#]',           # last occurrence of 300
+    '300[#-1]',         # last and penultimate 300
+    '300[0]$a',         # each subfield $a of 1st 300
+    '300$a[0]',         # first subfield $a of each 300
+    '300$a[#]',         # last subfield $a of each 300
+    '300$a[#-1]',       # last two subfield $a of each 300
+    '880^1',            # indicator 1 of each 880
+    '880[1]^2',         # indicator 2 of the 2nd 880
+    # subspec
+    '020$c{?020$a}',    # each subfield $c of each 020, if any subfield $a of any 020 exists
+    '020$z{!020$a}',
+    '008/18{LDR/6=\\t}',
+    '245$b{007/0=\\a|007/0=\\t}',       # multiple terms
+    '008/18{LDR/6=\\a}{LDR/7=\\a|LDR/7=\\c|LDR/7=\\d|LDR/7=\\m}',
+    '880$a{100$6~$6/3-5}{100$6~\\880}',     # chaining
+    # abbreviations in subspecs
+    '007[1]/3{/0=\\v}',
+    '020$c{$a}',
+    '800[0]{$a~\\Poe}{^2=\\1}',
+    '245$a{/0-2=\\The}',
+    '020$c{$q=\\paperback}',
 ])
-def test_parser_accepts(pattern):
-    parser = MarcSpecParser(parseinfo=True, whitespace='')
-    ast = parser.parse(pattern)
+def test_parser_accepts(pattern, marcspec_parser):
+    ast = marcspec_parser.parse(pattern)
     assert ast.parseinfo.rule == 'marcSpec'
 
 
@@ -185,9 +222,22 @@ def test_parser_accepts(pattern):
     '880[0-',
     '245[',
     '22',
+    '300[ 0]',
+    '300[0 ]',
+    '300 [0-2]',
+    '300[0 -2]',
+    '300[0- 2]',
+    '300[0-2 ]',
+    '007 /#',
+    '007/ #',
+    '007/0- 1',
+    '007/0 -1',
+    '020$c{ ?$a}'
+    '020$c {$a}',
+    '020$c{$ a}',
+    '020$c{$a }',
 ])
-def test_parser_rejects(pattern):
-    parser = MarcSpecParser(parseinfo=True, whitespace='')
+def test_parser_rejects(pattern, marcspec_parser):
     with pytest.raises(FailedParse) as info:
-        parser.parse(pattern)
+        marcspec_parser.parse(pattern)
     print(info.value)

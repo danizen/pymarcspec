@@ -5,4 +5,4 @@ from marcspec.parser import MarcSpecParser
 
 @pytest.fixture()
 def marcspec_parser():
-    return MarcSpecParser(parseinfo=True)
+    return MarcSpecParser(parseinfo=True, whitespace='')
