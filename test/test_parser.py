@@ -1,3 +1,9 @@
+import pytest
+
+from tatsu.exceptions import FailedParse
+from marcspec.parser import MarcSpecParser
+
+
 def test_fieldspec_tag(marcspec_parser):
     ast = marcspec_parser.parse('856')
     assert ast.field.tag == '856'
@@ -164,3 +170,24 @@ def test_subfield_with_subspec_subfield_unop(marcspec_parser):
     assert term.right.data.codes.code.code == 'a'
     assert term.right.field is None
     assert term.right.inds is None
+
+
+@pytest.mark.parametrize('pattern', [
+    "880",
+])
+def test_parser_accepts(pattern):
+    parser = MarcSpecParser(parseinfo=True, whitespace='')
+    ast = parser.parse(pattern)
+    assert ast.parseinfo.rule == 'marcSpec'
+
+
+@pytest.mark.parametrize('pattern', [
+    '880[0-',
+    '245[',
+    '22',
+])
+def test_parser_rejects(pattern):
+    parser = MarcSpecParser(parseinfo=True, whitespace='')
+    with pytest.raises(FailedParse) as info:
+        parser.parse(pattern)
+    print(info.value)
