@@ -90,4 +90,4 @@ class MarcSpec:
 
     type = attr.ib(type=int)
     value = attr.ib()
-    conditions = attr.ib(default=None)
+    condition = attr.ib(default=None)

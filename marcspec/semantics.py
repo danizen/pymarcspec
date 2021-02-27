@@ -135,34 +135,46 @@ class MarcSearchSemantics:
         )
 
     def marcSpec(self, ast):
-        conditions = ConditionExpr(all=ast.subspec) if ast.subspec else None
+        condition = ConditionExpr(all=ast.subspec) if ast.subspec else None
         if ast.field:
             return MarcSpec(
                 type=MarcSpec.FIELD,
                 value=ast.field,
-                conditions=conditions
-            )
+                condition=condition)
         elif ast.inds:
             return MarcSpec(
                 type=MarcSpec.INDICATOR,
                 value=ast.inds,
-                conditions=conditions
-            )
+                condition=condition)
         elif ast.data:
             if ast.data[1] and ast.data[2]:
                 # when chaining abrSubfieldSpec, the subSpecs go at the end
                 raise FailedSemantics()
             if not ast.data[2]:
-                conditions = ConditionExpr(all=ast.data[1]) if ast.data[1] else None
+                condition = ConditionExpr(all=ast.data[1]) if ast.data[1] else None
                 return MarcSpec(
                     type=MarcSpec.VARDATA,
                     value=ast.data[0],
-                    conditions=conditions
+                    condition=condition
                 )
             else:
-                # need to consolidate data[2] abbreviated subfield specs into a new SubfieldSpec
-                # need to build contitions
-                return ast
+                # Build conditional expression form the last chain of subspecs, which is the only that can exist
+                last_chain = ast.data[2][-1][1]
+                condition = ConditionExpr(all=last_chain) if last_chain else None
+
+                # we need to insist that only of the last possible chain of subspecs exists
+                prev_chains = [dat[1] for dat in ast.data[2][:-1]]
+                if any(prev_chains):
+                    raise FailedSemantics()
+                # extent
+                dat2_subfields = [dat[0] for dat in ast.data[2]]
+                subfield_spec = SubfieldSpec(
+                    tag=ast.data[0].tag,
+                    subfields=ast.data[0].subfields + dat2_subfields)
+                return MarcSpec(
+                    type=MarcSpec.VARDATA,
+                    value=subfield_spec,
+                    condition=condition)
         else:
             # must be one of fields, indicators, or variable data
             raise FailedSemantics()
