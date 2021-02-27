@@ -6,12 +6,9 @@ from tatsu.exceptions import FailedSemantics
 from .model import (
     CharSpec,
     IndexSpec,
-    AbrSubfieldSpec,
-    SubfieldSpec,
-    AbrFieldSpec,
-    FieldSpec,
-    AbrIndicatorSpec,
-    IndicatorSpec,
+    SubFieldFilter,
+    FieldFilter,
+    IndicatorFilter,
     StringCompare,
     ConditionTerm,
     ConditionExpr,
@@ -48,47 +45,51 @@ class MarcSearchSemantics:
 
     def abrSubfieldSpec(self, ast):
         if ast.range:
-            return AbrSubfieldSpec(
+            return SubFieldFilter(
                 start=ast.range.start,
                 end=ast.range.end,
                 cspec=ast.cspec,
                 index=ast.index
             )
         else:
-            return AbrSubfieldSpec(
+            return SubFieldFilter(
                 start=ast.code,
                 cspec=ast.cpsec,
                 index=ast.index
             )
 
     def subfieldSpec(self, ast):
-        return SubfieldSpec(
+        return MarcSpec(
             tag=ast.tag,
-            subfields=[ast.codes],
+            filter=[ast.codes],
         )
 
     def abrFieldSpec(self, ast):
-        return AbrFieldSpec(
+        return FieldFilter(
             cspec=ast.cspec,
             index=ast.index
         )
 
     def fieldSpec(self, ast):
-        return FieldSpec(
+        return MarcSpec(
             tag=ast.tag,
-            cspec=ast.cspec,
-            index=ast.index
+            filter=FieldFilter(
+                cspec=ast.cspec,
+                index=ast.index
+            )
         )
 
     def indicatorSpec(self, ast):
-        return IndicatorSpec(
+        return MarcSpec(
             tag=ast.tag,
-            indicator=ast.ind,
-            index=ast.index
+            filter=IndicatorFilter(
+                index=ast.index,
+                indicator=ast.ind,
+            )
         )
 
     def abrIndicatorSpec(self, ast):
-        return AbrIndicatorSpec(
+        return IndicatorFilter(
             indicator=ast.ind,
             index=ast.index
         )
@@ -138,12 +139,16 @@ class MarcSearchSemantics:
         condition = ConditionExpr(all=ast.subspec) if ast.subspec else None
         if ast.field:
             return MarcSpec(
-                value=ast.field,
-                condition=condition)
+                tag=ast.field.tag,
+                filter=ast.field.filter,
+                condition=condition
+            )
         elif ast.inds:
             return MarcSpec(
-                value=ast.inds,
-                condition=condition)
+                tag=ast.inds.tag,
+                filter=ast.inds.filter,
+                condition=condition
+            )
         elif ast.data:
             if ast.data[1] and ast.data[2]:
                 # when chaining abrSubfieldSpec, the subSpecs go at the end
@@ -151,7 +156,8 @@ class MarcSearchSemantics:
             if not ast.data[2]:
                 condition = ConditionExpr(all=ast.data[1]) if ast.data[1] else None
                 return MarcSpec(
-                    value=ast.data[0],
+                    tag=ast.data[0].tag,
+                    filter=ast.data[0].filter,
                     condition=condition
                 )
             else:
@@ -164,13 +170,12 @@ class MarcSearchSemantics:
                 if any(prev_chains):
                     raise FailedSemantics()
                 # extent
-                dat2_subfields = [dat[0] for dat in ast.data[2]]
-                subfield_spec = SubfieldSpec(
-                    tag=ast.data[0].tag,
-                    subfields=ast.data[0].subfields + dat2_subfields)
+                dat2_filters = [dat[0] for dat in ast.data[2]]
                 return MarcSpec(
-                    value=subfield_spec,
-                    condition=condition)
+                    tag=ast.data[0].tag,
+                    filter=ast.data[0].filter + dat2_filters,
+                    condition=condition
+                )
         else:
             # must be one of fields, indicators, or variable data
             raise FailedSemantics()

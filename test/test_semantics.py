@@ -1,8 +1,6 @@
 from marcspec.model import (
-    MarcSpec,
-    FieldSpec,
-    IndicatorSpec,
-    SubfieldSpec,
+    FieldFilter,
+    IndicatorFilter,
     ConditionExpr,
     ConditionTerm,
 )
@@ -10,29 +8,29 @@ from marcspec.model import (
 
 def test_simple_field(search_parser):
     spec = search_parser.parse('880')
-    assert isinstance(spec.value, FieldSpec)
-    assert spec.value.tag == '880'
-    assert spec.value.index is None
-    assert spec.value.cspec is None
+    assert isinstance(spec.filter, FieldFilter)
+    assert spec.tag == '880'
+    assert spec.filter.index is None
+    assert spec.filter.cspec is None
     assert spec.condition is None
 
 
 def test_simple_indicator(search_parser):
     spec = search_parser.parse('650^2')
-    assert isinstance(spec.value, IndicatorSpec)
-    assert spec.value.tag == '650'
-    assert spec.value.index is None
+    assert isinstance(spec.filter, IndicatorFilter)
+    assert spec.tag == '650'
+    assert spec.filter.index is None
     assert spec.condition is None
 
 
 def test_field_with_cspec_and_conditions(search_parser):
     spec = search_parser.parse('008[0]/0-7{LDR/5!=\\d}')
-    assert isinstance(spec.value, FieldSpec)
-    assert spec.value.tag == '008'
-    assert spec.value.index.start == 0
-    assert spec.value.index.end is None
-    assert spec.value.cspec.start == 0
-    assert spec.value.cspec.end == 7
+    assert isinstance(spec.filter, FieldFilter)
+    assert spec.tag == '008'
+    assert spec.filter.index.start == 0
+    assert spec.filter.index.end is None
+    assert spec.filter.cspec.start == 0
+    assert spec.filter.cspec.end == 7
     assert isinstance(spec.condition, ConditionExpr)
     assert len(spec.condition.all) == 1
     assert len(spec.condition.all[0].any) == 1
@@ -42,9 +40,9 @@ def test_field_with_cspec_and_conditions(search_parser):
 
 def test_indicator_with_conditions(search_parser):
     spec = search_parser.parse('650^2{$a~\\Interstitial}')
-    assert isinstance(spec.value, IndicatorSpec)
-    assert spec.value.tag == '650'
-    assert spec.value.index is None
+    assert isinstance(spec.filter, IndicatorFilter)
+    assert spec.tag == '650'
+    assert spec.filter.index is None
     assert isinstance(spec.condition, ConditionExpr)
     assert len(spec.condition.all) == 1
     assert len(spec.condition.all[0].any) == 1
@@ -54,25 +52,25 @@ def test_indicator_with_conditions(search_parser):
 
 def test_simple_subfield(search_parser):
     spec = search_parser.parse('245$a-c')
-    assert isinstance(spec.value, SubfieldSpec)
-    assert spec.value.tag == '245'
-    assert len(spec.value.subfields) == 1
-    assert spec.value.subfields[0].start == 'a'
-    assert spec.value.subfields[0].end == 'c'
-    assert spec.value.subfields[0].cspec is None
-    assert spec.value.subfields[0].index is None
+    assert isinstance(spec.filter, list)
+    assert spec.tag == '245'
+    assert len(spec.filter) == 1
+    assert spec.filter[0].start == 'a'
+    assert spec.filter[0].end == 'c'
+    assert spec.filter[0].cspec is None
+    assert spec.filter[0].index is None
     assert spec.condition is None
 
 
 def test_subfield_with_subspec_terms(search_parser):
     spec = search_parser.parse('245$a-c{^1=\\1|?$9}')
-    assert isinstance(spec.value, SubfieldSpec)
-    assert spec.value.tag == '245'
-    assert len(spec.value.subfields) == 1
-    assert spec.value.subfields[0].start == 'a'
-    assert spec.value.subfields[0].end == 'c'
-    assert spec.value.subfields[0].cspec is None
-    assert spec.value.subfields[0].index is None
+    assert isinstance(spec.filter, list)
+    assert spec.tag == '245'
+    assert len(spec.filter) == 1
+    assert spec.filter[0].start == 'a'
+    assert spec.filter[0].end == 'c'
+    assert spec.filter[0].cspec is None
+    assert spec.filter[0].index is None
     assert isinstance(spec.condition, ConditionExpr)
     assert len(spec.condition.all) == 1
     assert len(spec.condition.all[0].any) == 2
@@ -83,20 +81,18 @@ def test_subfield_with_subspec_terms(search_parser):
 
 def test_subfield_many_with_subspec_chain(search_parser):
     spec = search_parser.parse('245$a-c$e$g{^1=\\1}{?$9}')
-    assert isinstance(spec.value, SubfieldSpec)
-    assert spec.value.tag == '245'
-    assert len(spec.value.subfields) == 3
-    assert spec.value.subfields[0].start == 'a'
-    assert spec.value.subfields[0].end == 'c'
-    assert spec.value.subfields[1].start == 'e'
-    assert spec.value.subfields[1].end is None
-    assert spec.value.subfields[2].start == 'g'
-    assert spec.value.subfields[2].end is None
-
-    for subf in spec.value.subfields:
-        assert subf.cspec is None
-        assert subf.index is None
-
+    assert isinstance(spec.filter, list)
+    assert spec.tag == '245'
+    assert len(spec.filter) == 3
+    assert spec.filter[0].start == 'a'
+    assert spec.filter[0].end == 'c'
+    assert spec.filter[1].start == 'e'
+    assert spec.filter[1].end is None
+    assert spec.filter[2].start == 'g'
+    assert spec.filter[2].end is None
+    for filter in spec.filter:
+        assert filter.cspec is None
+        assert filter.index is None
     assert isinstance(spec.condition, ConditionExpr)
     assert len(spec.condition.all) == 2
     assert len(spec.condition.all[0].any) == 1

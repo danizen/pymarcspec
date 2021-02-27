@@ -18,7 +18,7 @@ class CharSpec:
 
 
 @attr.s(frozen=True)
-class AbrSubfieldSpec:
+class SubFieldFilter:
     start = attr.ib()
     end = attr.ib(default=None)
     cspec = attr.ib(default=None)
@@ -26,33 +26,13 @@ class AbrSubfieldSpec:
 
 
 @attr.s(frozen=True)
-class SubfieldSpec:
-    tag = attr.ib()
-    subfields = attr.ib()
-
-
-@attr.s(frozen=True)
-class AbrFieldSpec:
+class FieldFilter:
     cspec = attr.ib(default=None)
     index = attr.ib(default=None)
 
 
 @attr.s(frozen=True)
-class FieldSpec:
-    tag = attr.ib()
-    cspec = attr.ib(default=None)
-    index = attr.ib(default=None)
-
-
-@attr.s(frozen=True)
-class IndicatorSpec:
-    tag = attr.ib()
-    indicator = attr.ib()
-    index = attr.ib(default=None)
-
-
-@attr.s(frozen=True)
-class AbrIndicatorSpec:
+class IndicatorFilter:
     indicator = attr.ib()
     index = attr.ib(default=None)
 
@@ -76,13 +56,7 @@ class ConditionExpr:
 
 
 @attr.s(frozen=True)
-class DataSpec:
-    tag = attr.ib()
-    subfields = attr.ib()
-    subspec = attr.ib()
-
-
-@attr.s(frozen=True)
 class MarcSpec:
-    value = attr.ib()
+    tag = attr.ib()
+    filter = attr.ib()
     condition = attr.ib(default=None)
