@@ -78,6 +78,8 @@ class MarcSpec:
     def filter_by_index(self, fields):
         # needs to be safe if the list of fields contains nothing
         index = self.get_index()
+        if index is None:
+            return fields
         start = -1 if index.start == '#' else index.start
         end = len(fields) if index.end == '#' else index.end
         if end is None:
@@ -88,7 +90,9 @@ class MarcSpec:
                 end += 1
             return fields[start:end]
 
-    def search(self, record):
+    def search(self, record, totext=False, delim=':'):
         fields = self.get_fields(record)
         fields = self.filter_by_index(fields)
+        if totext:
+            return delim.join(field.value() for field in fields)
         return fields
