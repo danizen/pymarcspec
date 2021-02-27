@@ -6,7 +6,7 @@ from .semantics import MarcSearchSemantics
 
 
 # memoize compiling of strings into AST using some searcher
-class MarcSpecSearch:
+class MarcSearch:
     def __init__(self):
         self.parser = MarcSpecParser(
             whitespace='',
@@ -22,20 +22,4 @@ class MarcSpecSearch:
 
     def search(self, record, marcspec):
         spec = self.add(marcspec)
-        if spec.field:
-            return self._search_fields(record, spec)
-        elif spec.inds:
-            return self._search_indicators(record, spec)
-        elif spec.data:
-            return self._search_data(record, spec)
-        else:
-            raise RuntimeError('All MarcSpec should search fields, indicators, or variable data')
-
-    def _search_fields(self, record, spec):
-        raise RuntimeError('field search is not implemented')
-
-    def _search_indicators(self, record, spec):
-        raise RuntimeError('indicator search is not implemented')
-
-    def _search_data(self, record, spec):
-        raise RuntimeError('search over variable data is not implemented')
+        return spec.search(record)

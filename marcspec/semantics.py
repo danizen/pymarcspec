@@ -169,6 +169,11 @@ class MarcSearchSemantics:
                 prev_chains = [dat[1] for dat in ast.data[2][:-1]]
                 if any(prev_chains):
                     raise FailedSemantics()
+
+                # we need to insist also that none of these additional subfields have an index
+                if any(dat[0].index is not None for dat in ast.data[2]):
+                    raise FailedSemantics()
+
                 # extent
                 dat2_filters = [dat[0] for dat in ast.data[2]]
                 return MarcSpec(

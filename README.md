@@ -13,7 +13,7 @@ code to handle data.
 
 ```python
 import sys
-from marcspec import MarcSpecSearch
+from marcspec import MarcSearch
 from pymarc import MARCReader
 
 search = MarcSpecSearch()
