@@ -7,19 +7,21 @@ from .semantics import MarcSearchSemantics
 
 # memoize compiling of strings into AST using some searcher
 class MarcSpecSearch:
-
     def __init__(self):
-        self.parser = MarcSpecParser(semantics=MarcSearchSemantics())
+        self.parser = MarcSpecParser(
+            whitespace='',
+            semantics=MarcSearchSemantics()
+        )
         self.specs = dict()
 
-    def _spec(self, marcspec):
+    def add(self, marcspec):
         spec = self.specs.get(marcspec)
         if spec is None:
             self.specs[marcspec] = spec = self.parser.parse(marcspec)
         return spec
 
     def search(self, record, marcspec):
-        spec = self._spec(marcspec)
+        spec = self.add(marcspec)
         if spec.field:
             return self._search_fields(record, spec)
         elif spec.inds:
