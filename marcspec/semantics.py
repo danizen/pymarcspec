@@ -138,12 +138,10 @@ class MarcSearchSemantics:
         condition = ConditionExpr(all=ast.subspec) if ast.subspec else None
         if ast.field:
             return MarcSpec(
-                type=MarcSpec.FIELD,
                 value=ast.field,
                 condition=condition)
         elif ast.inds:
             return MarcSpec(
-                type=MarcSpec.INDICATOR,
                 value=ast.inds,
                 condition=condition)
         elif ast.data:
@@ -153,7 +151,6 @@ class MarcSearchSemantics:
             if not ast.data[2]:
                 condition = ConditionExpr(all=ast.data[1]) if ast.data[1] else None
                 return MarcSpec(
-                    type=MarcSpec.VARDATA,
                     value=ast.data[0],
                     condition=condition
                 )
@@ -172,7 +169,6 @@ class MarcSearchSemantics:
                     tag=ast.data[0].tag,
                     subfields=ast.data[0].subfields + dat2_subfields)
                 return MarcSpec(
-                    type=MarcSpec.VARDATA,
                     value=subfield_spec,
                     condition=condition)
         else:

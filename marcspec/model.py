@@ -84,10 +84,5 @@ class DataSpec:
 
 @attr.s(frozen=True)
 class MarcSpec:
-    FIELD = 1
-    INDICATOR = 2
-    VARDATA = 3
-
-    type = attr.ib(type=int)
     value = attr.ib()
     condition = attr.ib(default=None)

@@ -10,7 +10,6 @@ from marcspec.model import (
 
 def test_simple_field(search_parser):
     spec = search_parser.parse('880')
-    assert spec.type == MarcSpec.FIELD
     assert isinstance(spec.value, FieldSpec)
     assert spec.value.tag == '880'
     assert spec.value.index is None
@@ -20,7 +19,6 @@ def test_simple_field(search_parser):
 
 def test_simple_indicator(search_parser):
     spec = search_parser.parse('650^2')
-    assert spec.type == MarcSpec.INDICATOR
     assert isinstance(spec.value, IndicatorSpec)
     assert spec.value.tag == '650'
     assert spec.value.index is None
@@ -29,7 +27,6 @@ def test_simple_indicator(search_parser):
 
 def test_field_with_cspec_and_conditions(search_parser):
     spec = search_parser.parse('008[0]/0-7{LDR/5!=\\d}')
-    assert spec.type == MarcSpec.FIELD
     assert isinstance(spec.value, FieldSpec)
     assert spec.value.tag == '008'
     assert spec.value.index.start == 0
@@ -45,7 +42,6 @@ def test_field_with_cspec_and_conditions(search_parser):
 
 def test_indicator_with_conditions(search_parser):
     spec = search_parser.parse('650^2{$a~\\Interstitial}')
-    assert spec.type == MarcSpec.INDICATOR
     assert isinstance(spec.value, IndicatorSpec)
     assert spec.value.tag == '650'
     assert spec.value.index is None
@@ -58,7 +54,6 @@ def test_indicator_with_conditions(search_parser):
 
 def test_simple_subfield(search_parser):
     spec = search_parser.parse('245$a-c')
-    assert spec.type == MarcSpec.VARDATA
     assert isinstance(spec.value, SubfieldSpec)
     assert spec.value.tag == '245'
     assert len(spec.value.subfields) == 1
@@ -71,7 +66,6 @@ def test_simple_subfield(search_parser):
 
 def test_subfield_with_subspec_terms(search_parser):
     spec = search_parser.parse('245$a-c{^1=\\1|?$9}')
-    assert spec.type == MarcSpec.VARDATA
     assert isinstance(spec.value, SubfieldSpec)
     assert spec.value.tag == '245'
     assert len(spec.value.subfields) == 1
@@ -89,7 +83,6 @@ def test_subfield_with_subspec_terms(search_parser):
 
 def test_subfield_many_with_subspec_chain(search_parser):
     spec = search_parser.parse('245$a-c$e$g{^1=\\1}{?$9}')
-    assert spec.type == MarcSpec.VARDATA
     assert isinstance(spec.value, SubfieldSpec)
     assert spec.value.tag == '245'
     assert len(spec.value.subfields) == 3
