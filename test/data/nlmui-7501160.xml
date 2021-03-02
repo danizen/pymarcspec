@@ -1,0 +1,229 @@
+<record xmlns="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+  <leader>03244cas a2200721   4500</leader>
+  <controlfield tag="001">994579063406676</controlfield>
+  <controlfield tag="005">20201127234714.0</controlfield>
+  <controlfield tag="007">cr|cn ||||||||</controlfield>
+  <controlfield tag="008">750308c19609999iluwr p       0    0eng  </controlfield>
+  <datafield ind1=" " ind2=" " tag="010">
+    <subfield code="a">   82643544 </subfield>
+    <subfield code="z">sn 78004483</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="022">
+    <subfield code="a">0098-7484</subfield>
+    <subfield code="l">0098-7484</subfield>
+    <subfield code="9">PY</subfield>
+    <subfield code="0">(Print)</subfield>
+    <subfield code="y">0002-9955</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="022">
+    <subfield code="a">1538-3598</subfield>
+    <subfield code="9">EN</subfield>
+    <subfield code="0">(Electronic)</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="030">
+    <subfield code="a">JAMAAP</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="035">
+    <subfield code="a">(DNLM)J03340000(s)</subfield>
+    <subfield code="z">(DNLM)J11880000(s)</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="035">
+    <subfield code="a">(OCoLC)01124917</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="035">
+    <subfield code="9">7501160</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="035">
+    <subfield code="a">(DNLM)457906-nlmdb</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="040">
+    <subfield code="a">DNLM</subfield>
+    <subfield code="c">DNLM</subfield>
+  </datafield>
+  <datafield ind1="0" ind2=" " tag="041">
+    <subfield code="a">eng</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="042">
+    <subfield code="a">nsdp</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="044">
+    <subfield code="9">United States</subfield>
+  </datafield>
+  <datafield ind1="0" ind2="0" tag="060">
+    <subfield code="a">W1</subfield>
+    <subfield code="b">J221</subfield>
+  </datafield>
+  <datafield ind1="1" ind2="0" tag="210">
+    <subfield code="a">JAMA</subfield>
+    <subfield code="2">DNLM</subfield>
+  </datafield>
+  <datafield ind1=" " ind2="0" tag="222">
+    <subfield code="a">JAMA, the journal of the American Medical Association</subfield>
+  </datafield>
+  <datafield ind1="0" ind2="0" tag="245">
+    <subfield code="a">JAMA.</subfield>
+  </datafield>
+  <datafield ind1="3" ind2="0" tag="246">
+    <subfield code="a">Journal of the American Medical Association</subfield>
+  </datafield>
+  <datafield ind1="2" ind2=" " tag="246">
+    <subfield code="0">J A M A</subfield>
+    <subfield code="9">n</subfield>
+  </datafield>
+  <datafield ind1="2" ind2=" " tag="246">
+    <subfield code="0">JAMA</subfield>
+    <subfield code="9">n</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="260">
+    <subfield code="a">Chicago :</subfield>
+    <subfield code="b">American Medical Association,</subfield>
+    <subfield code="c">1960-</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="300">
+    <subfield code="a">v. :</subfield>
+    <subfield code="b">ill., ports.</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="310">
+    <subfield code="a">Weekly</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="336">
+    <subfield code="a">text</subfield>
+    <subfield code="b">txt</subfield>
+    <subfield code="2">rdacontent</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="337">
+    <subfield code="a">unmediated</subfield>
+    <subfield code="b">n</subfield>
+    <subfield code="2">rdamedia</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="338">
+    <subfield code="a">volume</subfield>
+    <subfield code="b">nc</subfield>
+    <subfield code="2">rdacarrier</subfield>
+  </datafield>
+  <datafield ind1="0" ind2=" " tag="362">
+    <subfield code="a">Vol. 173, no. 9 (July 2, 1960)-</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="500">
+    <subfield code="a">Title from caption.</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="500">
+    <subfield code="a">Issued with subtitle: Journal of the American Medical Association.</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="500">
+    <subfield code="a">Beginning with v. for 1987, Sept.-May issues include a section called: Pulse.</subfield>
+  </datafield>
+  <datafield ind1="1" ind2=" " tag="510">
+    <subfield code="9">1</subfield>
+    <subfield code="a">MEDLINE</subfield>
+    <subfield code="b">v187n13, Mar. 28, 1964-</subfield>
+  </datafield>
+  <datafield ind1="0" ind2=" " tag="510">
+    <subfield code="9">1</subfield>
+    <subfield code="a">PubMed</subfield>
+    <subfield code="b">v187n13, Mar. 28, 1964-</subfield>
+  </datafield>
+  <datafield ind1="0" ind2=" " tag="510">
+    <subfield code="a">OLDMEDLINE</subfield>
+  </datafield>
+  <datafield ind1="1" ind2=" " tag="510">
+    <subfield code="a">Abridged index medicus</subfield>
+  </datafield>
+  <datafield ind1="1" ind2=" " tag="510">
+    <subfield code="a">Index medicus</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="530">
+    <subfield code="a">Also issued online.</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="533">
+    <subfield code="a">Microfilm.</subfield>
+    <subfield code="m">v. 203-204 (1968), v. 207 (1969)-216 (1971 June), v. 218, no. 7-13 (1971)</subfield>
+    <subfield code="b">[Bethesda, Md.] :</subfield>
+    <subfield code="c">National Library of Medicine,</subfield>
+    <subfield code="d">1987.</subfield>
+    <subfield code="e">26 microfilm reels : negative ; 35 mm.</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="555">
+    <subfield code="a">Vols. 211-230, 1970-74.  1 v.</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="580">
+    <subfield code="a">Vols. for 1960-1981 contain annually: Continuing education courses for physicians, also issued separately; vols. for 1982- contain semiannually: Continuing education opportunities for physicians, also issued separately as: Continuing education opportunities for physicians for the period ...</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="580">
+    <subfield code="a">Other editions available: JAMA. French. JAMA, and: JAMA en espan&#771;ol.</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="583">
+    <subfield code="c">19950524</subfield>
+    <subfield code="l">Not printed on acid-free paper</subfield>
+  </datafield>
+  <datafield ind1="1" ind2=" " tag="583">
+    <subfield code="3">v.5, Jul-Dec (1885), v.41, Jul-Dec (1903), v.50(1908)-v.112 (1939)-</subfield>
+    <subfield code="a">Condition reviewed</subfield>
+    <subfield code="c">20061106</subfield>
+    <subfield code="l">brittle</subfield>
+    <subfield code="x">Index Medicus title</subfield>
+    <subfield code="2">pda</subfield>
+    <subfield code="5">DNLM</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="583">
+    <subfield code="a">Committed to retain</subfield>
+    <subfield code="f">MedPrint</subfield>
+    <subfield code="u">http://www.nlm.nih.gov/psd/printretentionmain.html</subfield>
+    <subfield code="5">DNLM</subfield>
+  </datafield>
+  <datafield ind1="1" ind2="2" tag="650">
+    <subfield code="a">Medicine</subfield>
+    <subfield code="0">https://id.nlm.nih.gov/mesh/D008511</subfield>
+  </datafield>
+  <datafield ind1=" " ind2="2" tag="655">
+    <subfield code="a">Periodical</subfield>
+    <subfield code="0">https://id.nlm.nih.gov/mesh/D020492</subfield>
+  </datafield>
+  <datafield ind1="2" ind2=" " tag="710">
+    <subfield code="a">American Medical Association.</subfield>
+  </datafield>
+  <datafield ind1="1" ind2=" " tag="777">
+    <subfield code="t">Continuing education courses for physicians</subfield>
+    <subfield code="w">(OCoLC)6474422</subfield>
+  </datafield>
+  <datafield ind1="1" ind2=" " tag="777">
+    <subfield code="t">Continuing education opportunities for physicians for the period ..</subfield>
+    <subfield code="x">0740-1515</subfield>
+    <subfield code="w">(DLC)sc 84007560</subfield>
+    <subfield code="w">(OCoLC)9818071</subfield>
+  </datafield>
+  <datafield ind1="0" ind2="0" tag="780">
+    <subfield code="t">Journal of the American Medical Association</subfield>
+    <subfield code="x">0002-9955</subfield>
+    <subfield code="w">(DLC)   07037314</subfield>
+    <subfield code="w">(OCoLC)1480379</subfield>
+  </datafield>
+  <datafield ind1="4" ind2=" " tag="856">
+    <subfield code="u">https://jamanetwork.com/journals/jama/issue</subfield>
+    <subfield code="n">American Medical Association</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="913">
+    <subfield code="a">CLOCKSS</subfield>
+    <subfield code="b">20190507</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="995">
+    <subfield code="a">AUTH</subfield>
+    <subfield code="b">19750308</subfield>
+    <subfield code="c">REV</subfield>
+    <subfield code="d">20200924</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="996">
+    <subfield code="a">CONSER</subfield>
+    <subfield code="b">20000101</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="997">
+    <subfield code="a">OMR</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="998">
+    <subfield code="a">ERMSLC 167469</subfield>
+    <subfield code="b">20110228</subfield>
+  </datafield>
+  <datafield ind1=" " ind2=" " tag="999">
+    <subfield code="a">AUTH</subfield>
+  </datafield>
+</record>

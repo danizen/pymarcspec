@@ -13,14 +13,14 @@ code to handle data.
 
 ```python
 import sys
-from marcspec import MarcSearch
+from marcspec import MarcSearchParser
 from pymarc import MARCReader
 
-search = MarcSpecSearch()
-
+parser = MarcSearchParser()
+spec = parser.parse('650$a{^1=\\2}')
 with open(sys.argv[1], 'rb') as f:
     for record in MARCReader(f):
-        mesh_subjects = search.search(record, '650$a{^1=\\2')
+        mesh_subjects = spec.search(record)
         for subfield in mesh_subjects:
             print(subfield.value())
 ```
@@ -34,6 +34,11 @@ To build the parser, run:
 ```bash
 python -m tatsu -o marcparser/parser.py marcparser/marcparser.ebnf
 ```
+
+Note that this builds a class MarcSpecParser, which implements the full specification from
+[MarcSpec](https://github.com/MarcSpec/MarcSpec), the `MarcSearchParser` is a subclass
+that builds an instance of  `MarcSpec`; building this structure has some 
+restrictions for what I needed when I wrote it.
 
 ### Testing for freshness
 

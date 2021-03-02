@@ -3,6 +3,7 @@ pymarc
 attrs
 
 # testing
+lxml
 flake8
 pytest
 pytest-cov
