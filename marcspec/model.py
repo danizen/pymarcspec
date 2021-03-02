@@ -3,6 +3,7 @@
 Structure of the data used for a search, produced by semantic parser.
 """
 import attr
+import itertools
 import re
 
 
@@ -19,11 +20,17 @@ class CharSpec:
 
 
 @attr.s(frozen=True)
-class SubFieldFilter:
+class SubfieldFilter:
     start = attr.ib()
     end = attr.ib(default=None)
     cspec = attr.ib(default=None)
     index = attr.ib(default=None)
+
+    def codes(self):
+        if self.end:
+            return [chr(i) for i in range(ord('a'), ord('c')+1)]
+        else:
+            return [self.start]
 
 
 @attr.s(frozen=True)
@@ -92,7 +99,30 @@ class MarcSpec:
 
     def search(self, record, totext=False, delim=':'):
         fields = self.get_fields(record)
-        fields = self.filter_by_index(fields)
+        results = self.filter_by_index(fields)
+        if isinstance(self.filter, IndicatorFilter):
+            results = [
+                field.indicator1 if self.filter.indicator == 1 else field.indicator2
+                for field in results
+            ]
+            if totext:
+                return delim.join(results)
+            return results
+        elif isinstance(self.filter, list):
+            subfield_codes = [
+                code
+                for f in self.filter
+                for code in f.codes()
+            ]
+            results = [
+                subfield
+                for f in results
+                for subfield in f.get_subfields(subfield_codes)
+            ]
+            # apply cspec to subfields
+        else:
+            # apply cspec to field value
+            pass
         if totext:
-            return delim.join(field.value() for field in fields)
-        return fields
+            return delim.join(field.value() for field in results)
+        return results

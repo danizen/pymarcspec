@@ -6,7 +6,7 @@ from tatsu.exceptions import FailedSemantics
 from .model import (
     CharSpec,
     IndexSpec,
-    SubFieldFilter,
+    SubfieldFilter,
     FieldFilter,
     IndicatorFilter,
     StringCompare,
@@ -45,14 +45,14 @@ class MarcSearchSemantics:
 
     def abrSubfieldSpec(self, ast):
         if ast.range:
-            return SubFieldFilter(
+            return SubfieldFilter(
                 start=ast.range.start,
                 end=ast.range.end,
                 cspec=ast.cspec,
                 index=ast.index
             )
         else:
-            return SubFieldFilter(
+            return SubfieldFilter(
                 start=ast.code,
                 cspec=ast.cpsec,
                 index=ast.index

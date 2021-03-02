@@ -2,47 +2,43 @@
 Logic to search a pymarc.Record based on a compiled MarcSpec AST or object
 """
 import sys
-from pathlib import Path
+from argparse import ArgumentParser, FileType
 
-from pymarc import MARCReader, Record
+from pymarc import MARCReader
 from .parser import MarcSpecParser
 from .semantics import MarcSearchSemantics
 
 
 # memoize compiling of strings into AST using some searcher
-class MarcSearch:
-    def __init__(self):
-        self.parser = MarcSpecParser(
-            whitespace='',
-            semantics=MarcSearchSemantics()
-        )
-        self.specs = dict()
+class MarcSearchParser(MarcSpecParser):
+    def __init__(self, *args, **kwargs):
+        kwargs.update({
+            'whitespace': '',
+            'semantics': MarcSearchSemantics()
 
-    def add(self, marcspec):
-        spec = self.specs.get(marcspec)
-        if spec is None:
-            self.specs[marcspec] = spec = self.parser.parse(marcspec)
-        return spec
-
-    def search(self, record, marcspec, totext=True):
-        spec = self.add(marcspec)
-        return spec.search(record, totext=totext)
+        })
+        super().__init__(*args, **kwargs)
 
 
-def marc_search(marcspec, *args):
-    search = MarcSearch()
-    for path in args:
-        if isinstance(path, str):
-            path = Path(path)
-        if not isinstance(path, Path):
-            raise ValueError('path should string or pathlib.Path')
-        if not path.exists():
-            print(f'{path}: not found')
-        else:
-            with path.open('rb') as f:
-                for record in MARCReader(f):
-                    result = search.search(record, marcspec, True)
-                    print(result)
+def marc_search(marcspec, stream, delim='\n'):
+    parser = MarcSearchParser()
+    spec = parser.parse(marcspec)
+
+    for record in MARCReader(stream):
+        result = spec.search(record, totext=True, delim=delim)
+        print(result)
+        print('')
+
+
+def main(args=None):
+    if args is None:
+        args = sys.argv
+    parser = ArgumentParser(prog=args[0], description='Search over Marc records')
+    parser.add_argument('marcspec', metavar='EXPR', help='Search expression')
+    parser.add_argument('stream', metavar='PATH', type=FileType('rb'))
+    opts = parser.parse_args(args[1:])
+    marc_search(opts.marcspec, opts.stream)
+
 
 if __name__ == '__main__':
-    marc_search(*sys.argv[1:])
+    main()
