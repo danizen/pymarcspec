@@ -97,32 +97,33 @@ class MarcSpec:
                 end += 1
             return fields[start:end]
 
-    def search(self, record, totext=False, delim=':'):
+    def search(self, record, totext=True, field_delimiter=':', subfield_delimiter=','):
         fields = self.get_fields(record)
         results = self.filter_by_index(fields)
-        if isinstance(self.filter, IndicatorFilter):
+        if isinstance(self.filter, FieldFilter):
+            if totext:
+                results = [field.value() for field in results]
+            # apply cspec to field value
+        elif isinstance(self.filter, IndicatorFilter):
             results = [
                 field.indicator1 if self.filter.indicator == 1 else field.indicator2
                 for field in results
             ]
-            if totext:
-                return delim.join(results)
-            return results
-        elif isinstance(self.filter, list):
+        else:
+            # better be subfield filters
+            assert isinstance(self.filter, list)
+            assert all(isinstance(f, SubfieldFilter) for f in self.filter)
+            # get all the codes
             subfield_codes = [
                 code
                 for f in self.filter
                 for code in f.codes()
             ]
-            results = [
-                subfield
-                for f in results
-                for subfield in f.get_subfields(subfield_codes)
-            ]
+            # get the field results for all fields in the results
+            results = [f.get_subfields(*subfield_codes) for f in results]
             # apply cspec to subfields
-        else:
-            # apply cspec to field value
-            pass
+            if totext:
+                results = [subfield_delimiter.join(values) for values in results]
         if totext:
-            return delim.join(field.value() for field in results)
+            return field_delimiter.join(results)
         return results

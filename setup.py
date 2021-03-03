@@ -91,7 +91,11 @@ setup(
     cmdclass={
         'purge': PurgeCommand,
     },
-    entry_points={},
+    entry_points={
+        'console_scripts': [
+            'pymarcsearch=marcspec.search:main',
+        ]
+    },
     classifiers=[
         'Development Status :: 4 - Beta',
         'License :: Public Domain',
