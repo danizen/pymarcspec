@@ -70,13 +70,18 @@ class MarcSpec:
     condition = attr.ib(default=None)
 
     def get_fields(self, record):
-        if '.' not in self.tag:
+        if self.tag == 'LDR':
+            return [record.leader]
+        elif '.' not in self.tag:
             return record.get_fields(self.tag)
-        expr = re.compile(self.tag + '$')
-        return [field for field in record.get_fields() if expr.match(field.tag)]
+        else:
+            expr = re.compile(self.tag + '$')
+            return [field for field in record.get_fields() if expr.match(field.tag)]
 
     def get_index(self):
-        if isinstance(self.filter, list) and len(self.filter) > 0:
+        if not self.filter:
+            index = None
+        elif isinstance(self.filter, list) and len(self.filter) > 0:
             index = self.filter[0].index
         else:
             index = self.filter.index
@@ -100,9 +105,12 @@ class MarcSpec:
     def search(self, record, totext=True, field_delimiter=':', subfield_delimiter=','):
         fields = self.get_fields(record)
         results = self.filter_by_index(fields)
-        if isinstance(self.filter, FieldFilter):
+        if isinstance(self.filter, FieldFilter) or not self.filter:
             if totext:
-                results = [field.value() for field in results]
+                results = [
+                    field.value() if hasattr(field, 'value') else field
+                    for field in results
+                ]
             # apply cspec to field value
         elif isinstance(self.filter, IndicatorFilter):
             results = [
