@@ -3,7 +3,6 @@
 Structure of the data used for a search, produced by semantic parser.
 """
 import attr
-import itertools
 import re
 
 
