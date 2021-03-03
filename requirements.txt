@@ -1,9 +1,9 @@
 tatsu
 pymarc
 attrs
+lxml
 
 # testing
-lxml
 flake8
 pytest
 pytest-cov
