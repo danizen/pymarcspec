@@ -4,6 +4,7 @@ from marcspec.model import (
     FieldFilter,
     SubfieldFilter,
     IndexSpec,
+    CharSpec,
 )
 
 
@@ -67,3 +68,15 @@ def test_subfield_index_first(jama_record):
     ])
     subject = spec.search(jama_record)
     assert subject == 'Periodical'
+
+
+def test_field5_range(jama_record):
+    spec = MarcSpec(tag='005', filter=FieldFilter(cspec=CharSpec(start=0, end=8)))
+    update_date = spec.search(jama_record)
+    assert update_date == '20201127'
+
+
+def test_leader_range(jama_record):
+    spec = MarcSpec(tag='LDR', filter=FieldFilter(cspec=CharSpec(start=9)))
+    encoding = spec.search(jama_record)
+    assert encoding == 'a'

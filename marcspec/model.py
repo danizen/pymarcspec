@@ -12,11 +12,33 @@ class IndexSpec:
     start = attr.ib()
     end = attr.ib(default=None)
 
+    def filter(self, fields):
+        start = -1 if self.start == '#' else self.start
+        end = len(fields) if self.end == '#' else self.end
+        if end is None:
+            return [fields[start]]
+        else:
+            end = min(end, len(fields))
+            if start == -1:
+                end += 1
+            return fields[start:end]
+
 
 @attr.s(frozen=True)
 class CharSpec:
     start = attr.ib()
     end = attr.ib(default=None)
+
+    def filter(self, value):
+        start = -1 if self.start == '#' else self.start
+        end = len(value) if self.end == '#' else self.end
+        if end is None:
+            return value[start]
+        else:
+            end = min(end, len(value))
+            if start == -1:
+                end += 1
+            return value[start:end]
 
 
 @attr.s(frozen=True)
@@ -87,39 +109,42 @@ class MarcSpec:
             index = self.filter.index
         return index
 
+    def get_charspec(self):
+        if not self.filter:
+            cspec = None
+        elif isinstance(self.filter, list) and len(self.filter) > 0:
+            cspec = self.filter[-1].cspec
+        else:
+            cspec = self.filter.cspec
+        return cspec
+
     def filter_by_index(self, fields):
         # needs to be safe if the list of fields contains nothing
         index = self.get_index()
         if index is None:
             return fields
-        start = -1 if index.start == '#' else index.start
-        end = len(fields) if index.end == '#' else index.end
-        if end is None:
-            return [fields[start]]
-        else:
-            end = max(end, len(fields))
-            if start == -1:
-                end += 1
-            return fields[start:end]
+        return index.filter(fields)
 
     def search(self, record, totext=True, field_delimiter=':', subfield_delimiter=','):
         fields = self.get_fields(record)
         results = self.filter_by_index(fields)
         if isinstance(self.filter, FieldFilter) or not self.filter:
-            if totext:
+            cspec = self.get_charspec()
+            if totext or cspec:
                 results = [
                     field.value() if hasattr(field, 'value') else field
                     for field in results
                 ]
             # apply cspec to field value
+            if cspec:
+                results = [cspec.filter(value) for value in results]
         elif isinstance(self.filter, IndicatorFilter):
             results = [
                 field.indicator1 if self.filter.indicator == 1 else field.indicator2
                 for field in results
             ]
-        else:
+        elif isinstance(self.filter, list):
             # better be subfield filters
-            assert isinstance(self.filter, list)
             assert all(isinstance(f, SubfieldFilter) for f in self.filter)
             # get all the codes
             subfield_codes = [
@@ -129,7 +154,7 @@ class MarcSpec:
             ]
             # get the field results for all fields in the results
             results = [f.get_subfields(*subfield_codes) for f in results]
-            # apply cspec to subfields
+            # TODO: apply cspec to subfields
             if totext:
                 results = [subfield_delimiter.join(values) for values in results]
         if totext:
