@@ -35,7 +35,7 @@ To build the parser, run:
 python -m tatsu -o marcparser/parser.py marcparser/marcparser.ebnf
 ```
 
-Note that this builds a class MarcSpecParser, which implements the full specification from
+Note that this builds a class `MarcSpecParser`, which implements the full specification from
 [MarcSpec](https://github.com/MarcSpec/MarcSpec), the `MarcSearchParser` is a subclass
 that builds an instance of  `MarcSpec`; building this structure has some 
 restrictions for what I needed when I wrote it.
@@ -45,5 +45,35 @@ restrictions for what I needed when I wrote it.
 The test in `test/test_ebnf.py` compiles the parser from the EBNF into a temporary path, which makes sure
 that coffee driven programmers like me remember to compile the parser and check in the changes.
 
+## Performance
 
+It is not obvious this is needed.  It may be fine for instance to use XPath expressions.
+Suppose we are going to do a lot of these conversions - if XPath is fast enough, the work of converting
+from a `pymarc.Record` to MARCXML will be amoritized by many searches.  Jupyter Notebooks have a %timeit
+magic that allows us to check this:
 
+Let us check the performance of the simplest such XPath expression:
+
+```python
+In [34]: %timeit ''.join(doc.xpath('./controlfield[@tag="001"]/text()'))                                                                                  
+19.4 µs ± 1.07 µs per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+```
+
+And compare it to parsing a spec and searching:
+
+```python
+In [37]: from pymarcspec import MarcSearchParser                                                    
+
+In [38]: parser = MarcSearchParser()                                                                
+
+In [39]: spec = parser.parse('001')                                                                 
+
+In [40]: spec.search(record)                                                                        
+Out[40]: '1589530'
+
+In [41]: %timeit spec.search(record)                                                                
+7.89 µs ± 253 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+```
+
+So, from a performance perspective this is clearly a win, and the expression is much closer
+to library IT.
