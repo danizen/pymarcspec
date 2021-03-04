@@ -5,14 +5,14 @@ import sys
 
 import tatsu
 
-import marcspec.parser
+import pymarcspec.parser
 
 
 def test_compile(tmp_path):
     """
     Test that the BNF file compiles to the same content as the loader.parser
     """
-    expected_source_path = marcspec.parser.__file__
+    expected_source_path = pymarcspec.parser.__file__
     grammar_path = re.sub('parser.py$', 'marcspec.ebnf', expected_source_path)
     assert os.path.exists(grammar_path)
     actual_source_path = str(tmp_path / 'test_parser.py')
@@ -31,7 +31,7 @@ def test_compile(tmp_path):
     delta = difflib.unified_diff(
         expected_lines,
         actual_lines,
-        fromfile='marcspec/parser.py',
+        fromfile='pymarcspec/parser.py',
         tofile=actual_source_path
     )
     good = True

@@ -7,6 +7,25 @@ from pathlib import Path
 from setuptools import find_packages, setup
 
 
+classifiers = """
+Development Status :: 4 - Beta
+License :: Public Domain
+Environment :: Console
+Intended Audience :: Education
+Intended Audience :: Developers
+Intended Audience :: Information Technology
+Operating System :: MacOS :: MacOS X
+Operating System :: Microsoft :: Windows
+Operating System :: POSIX
+Programming Language :: Python :: 3
+Programming Language :: Python :: 3.6
+Programming Language :: Python :: 3.7
+Rrogramming Language :: Python :: 3.8
+Topic :: Utilities
+Topic :: Text Processing :: General
+"""
+
+
 def get_version():
     """
     Determine a version string using a file VERSION.txt
@@ -73,8 +92,8 @@ setup(
     long_description=get_readme(),
     long_description_content_type='text/markdown; charset=UTF-8; variant=CommonMark',
     author='Dan Davis',
-    author_email='daniel.davis@nih.gov',
-    url='https://github.com/danizen/pymarc/',
+    author_email='dan@danizen.net',
+    url='https://github.com/danizen/pymarcspec/',
     packages=[pkg for pkg in find_packages() if not pkg.startswith('test')],
     include_package_data=True,
     install_requires=[
@@ -93,18 +112,10 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'pymarcsearch=marcspec.search:main',
+            'pymarcsearch=pymarcspec.search:main',
         ]
     },
-    classifiers=[
-        'Development Status :: 4 - Beta',
-        'License :: Public Domain',
-        'Environment :: Console',
-        'Intended Audience :: Developers',
-        'Operating System :: MacOS :: MacOS X',
-        'Operating System :: Microsoft :: Windows',
-        'Operating System :: POSIX',
-        'Programming Language :: Python :: 3',
-        'Topic :: Utilities',
-    ],
+    classifiers=list(filter(None, classifiers.split("\n"))),
+    test_suite="test",
+    python_requires=">=3.6"
 )

@@ -1,5 +1,5 @@
 import pytest
-from marcspec.search import main
+from pymarcspec.search import main
 
 
 @pytest.mark.integration

@@ -3,8 +3,8 @@ import os
 from pymarc import parse_xml_to_array
 import pytest
 
-from marcspec.parser import MarcSpecParser
-from marcspec.semantics import MarcSearchSemantics
+from pymarcspec.parser import MarcSpecParser
+from pymarcspec.semantics import MarcSearchSemantics
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 

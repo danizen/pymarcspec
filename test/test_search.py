@@ -1,4 +1,4 @@
-from marcspec.model import (
+from pymarcspec.model import (
     MarcSpec,
     IndicatorFilter,
     FieldFilter,
