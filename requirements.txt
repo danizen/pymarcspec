@@ -1,4 +1,4 @@
-tatsu
+tatsu==4.4.0
 pymarc
 attrs
 lxml
@@ -7,4 +7,4 @@ lxml
 flake8
 pytest
 pytest-cov
-
+tox
