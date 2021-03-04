@@ -1,4 +1,5 @@
 # pymarcspec
+[![Build Status](https://travis-ci.org/danizen/pymarcspec.svg?branch=master)](https://travis-ci.org/danizen/pymarcspec) [![Coverage Status]
 
 ## Summary 
 
