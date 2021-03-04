@@ -2,5 +2,6 @@ include README.md
 include MANIFEST.in
 include VERSION.txt
 include requirements*.txt
+include pymarcspec/marcspec.ebnf
 recursive-include test **/*.py
 recursive-include test/data **/*.xml
