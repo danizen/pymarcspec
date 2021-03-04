@@ -1,5 +1,5 @@
 # pymarcspec
-[![Build Status](https://travis-ci.org/danizen/pymarcspec.svg?branch=master)](https://travis-ci.org/danizen/pymarcspec) [![Coverage Status][![Coverage Status](https://coveralls.io/repos/github/danizen/pymarcspec/badge.svg?branch=master)](https://coveralls.io/github/danizen/pymarcspec?branch=master)
+[![Build Status](https://travis-ci.org/danizen/pymarcspec.svg?branch=master)](https://travis-ci.org/danizen/pymarcspec) [![Coverage Status](https://coveralls.io/repos/github/danizen/pymarcspec/badge.svg?branch=master)](https://coveralls.io/github/danizen/pymarcspec?branch=master)
 
 ## Summary 
 
@@ -18,12 +18,11 @@ from pymarcspec import MarcSearchParser
 from pymarc import MARCReader
 
 parser = MarcSearchParser()
-spec = parser.parse('650$a{^1=\\2}')
+spec = parser.parse('650$a$0')
 with open(sys.argv[1], 'rb') as f:
     for record in MARCReader(f):
-        mesh_subjects = spec.search(record)
-        for subfield in mesh_subjects:
-            print(subfield.value())
+        subjects = spec.search(record, field_delimiter=':', subfield_delimiter=',')
+        print(subjects)
 ```
 
 ## Development
