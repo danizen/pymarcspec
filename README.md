@@ -1,5 +1,5 @@
 # pymarcspec
-[![Build Status](https://travis-ci.org/danizen/pymarcspec.svg?branch=master)](https://travis-ci.org/danizen/pymarcspec) [![Coverage Status](https://coveralls.io/repos/github/danizen/pymarcspec/badge.svg?branch=master)](https://coveralls.io/github/danizen/pymarcspec?branch=master)
+[![Build Status](https://travis-ci.org/danizen/pymarcspec.svg?branch=main)](https://travis-ci.org/danizen/pymarcspec) [![Coverage Status](https://coveralls.io/repos/github/danizen/pymarcspec/badge.svg?branch=main)](https://coveralls.io/github/danizen/pymarcspec?branch=main)
 
 ## Summary 
 
