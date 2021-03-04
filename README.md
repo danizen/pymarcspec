@@ -16,7 +16,7 @@ code to handle data.
 import sys
 from pymarcspec import MarcSearchParser
 from pymarc import MARCReader
-=
+
 parser = MarcSearchParser()
 spec = parser.parse('650$a$0')
 with open(sys.argv[1], 'rb') as f:
