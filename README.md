@@ -25,6 +25,28 @@ with open(sys.argv[1], 'rb') as f:
         print(subjects)
 ```
 
+There is also a `MarcSearch` object that memoizes each search expression, so that 
+you can conveniently run a number of different searches without creating several
+parsed specs. For example:
+
+```python
+import csv
+import sys
+from pymarcspec import MarcSearch
+from pymarc import MARCReader
+
+writer = csv.writer(sys.stdout, dialect='unix', quoting=csv.QUOTE_MINIMAL)
+writer.writerow(['id', 'title', 'subjects'])
+
+marcsearch = MarcSearch()
+with open(sys.argv[1], 'rb') as f:
+    for record in MARCReader(f):
+        control_id = marcsearch.search('100', record)
+        title = marcsearch.search('245[0]$a-c', record)
+        subjects = marcsearch.search('650$a', record, field_delimiter=', ')
+        writer.writerow([control_id, title, subjects])        
+```
+
 ## Development
 
 ### Building the Parser

@@ -9,7 +9,6 @@ from .parser import MarcSpecParser
 from .semantics import MarcSearchSemantics
 
 
-# memoize compiling of strings into AST using some searcher
 class MarcSearchParser(MarcSpecParser):
     def __init__(self, *args, **kwargs):
         kwargs.update({
@@ -17,19 +16,44 @@ class MarcSearchParser(MarcSpecParser):
             'semantics': MarcSearchSemantics()
         })
         super().__init__(*args, **kwargs)
+        self.memoized = dict()
+
+
+# memoize compiling of strings into specs
+class MarcSearch:
+    """
+    Memoizes compiled specifications to offset
+    cost of compiling each again and again.
+
+    Can be used over multiple records and
+    multiple specs.
+    """
+    def __init__(self):
+        self.parser = MarcSearchParser()
+        self.specs = dict()
+
+    def parse(self, spec):
+        compiled_spec = self.specs.get(spec)
+        if compiled_spec is None:
+            self.specs[spec] = compiled_spec = self.parser.parse(spec)
+        return compiled_spec
+
+    def search(self, spec, record, **kwargs):
+        compiled_spec = self.parse(spec)
+        return compiled_spec.search(record, **kwargs)
 
 
 def marc_search(marcspec, stream, field_delimiter=':', subfield_delimiter=''):
-    parser = MarcSearchParser()
-    spec = parser.parse(marcspec)
+    searcher = MarcSearch()
+    searcher.parse(marcspec)
 
     if stream.name.endswith('.xml'):
         generator = parse_xml_to_array(stream)
     else:
         generator = MARCReader(stream)
     for record in generator:
-        result = spec.search(
-            record,
+        result = searcher.search(
+            marcspec, record,
             field_delimiter=field_delimiter,
             subfield_delimiter=subfield_delimiter
         )
