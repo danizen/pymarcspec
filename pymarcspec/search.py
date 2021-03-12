@@ -7,6 +7,7 @@ from argparse import ArgumentParser, FileType
 from pymarc import MARCReader, parse_xml_to_array
 from .parser import MarcSpecParser
 from .semantics import MarcSearchSemantics
+from .textstyle import TextStyle
 
 
 class MarcSearchParser(MarcSpecParser):
@@ -28,9 +29,10 @@ class MarcSearch:
     Can be used over multiple records and
     multiple specs.
     """
-    def __init__(self):
+    def __init__(self, style=None):
         self.parser = MarcSearchParser()
         self.specs = dict()
+        self.style = style
 
     def parse(self, spec):
         compiled_spec = self.specs.get(spec)
@@ -38,13 +40,16 @@ class MarcSearch:
             self.specs[spec] = compiled_spec = self.parser.parse(spec)
         return compiled_spec
 
-    def search(self, spec, record, **kwargs):
+    def search(self, spec, record, style=None):
+        if style is None:
+            style = self.style
         compiled_spec = self.parse(spec)
-        return compiled_spec.search(record, **kwargs)
+        return compiled_spec.search(record, style)
 
 
 def marc_search(marcspec, stream, field_delimiter=':', subfield_delimiter=''):
-    searcher = MarcSearch()
+    style = TextStyle(field_delimiter=field_delimiter, subfield_delimiter=subfield_delimiter)
+    searcher = MarcSearch(style)
     searcher.parse(marcspec)
 
     if stream.name.endswith('.xml'):
@@ -53,9 +58,7 @@ def marc_search(marcspec, stream, field_delimiter=':', subfield_delimiter=''):
         generator = MARCReader(stream)
     for record in generator:
         result = searcher.search(
-            marcspec, record,
-            field_delimiter=field_delimiter,
-            subfield_delimiter=subfield_delimiter
+            marcspec, record
         )
         print(result)
 

@@ -5,6 +5,8 @@ Structure of the data used for a search, produced by semantic parser.
 import attr
 import re
 
+from .textstyle import BaseTextStyle
+
 
 @attr.s(frozen=True)
 class IndexSpec:
@@ -124,12 +126,14 @@ class MarcSpec:
             return fields
         return index.filter(fields)
 
-    def search(self, record, totext=True, field_delimiter=':', subfield_delimiter=','):
+    def search(self, record, style=None):
+        if style and not isinstance(style, BaseTextStyle):
+            raise ValueError('style should be an instance of BaseTextStyle')
         fields = self.get_fields(record)
         results = self.filter_by_index(fields)
         if isinstance(self.filter, FieldFilter) or not self.filter:
             cspec = self.get_charspec()
-            if totext or cspec:
+            if cspec:
                 results = [
                     field.value() if hasattr(field, 'value') else field
                     for field in results
@@ -137,25 +141,27 @@ class MarcSpec:
             # apply cspec to field value
             if cspec:
                 results = [cspec.filter(value) for value in results]
+            if style:
+                results = [style.field_text(value) for value in results]
         elif isinstance(self.filter, IndicatorFilter):
             results = [
-                field.indicator1 if self.filter.indicator == 1 else field.indicator2
+                field.indicators[self.filter.indicator]
                 for field in results
             ]
         elif isinstance(self.filter, list):
             # better be subfield filters
             assert all(isinstance(f, SubfieldFilter) for f in self.filter)
             # get all the codes
-            subfield_codes = [
+            subfield_codes = {
                 code
                 for f in self.filter
                 for code in f.codes()
-            ]
+            }
             # get the field results for all fields in the results
             results = [f.get_subfields(*subfield_codes) for f in results]
             # TODO: apply cspec to subfields
-            if totext:
-                results = [subfield_delimiter.join(values) for values in results]
-        if totext:
-            return field_delimiter.join(results)
+            if style:
+                results = [style.subfield_text(values) for values in results]
+        if style:
+            return style.join(results)
         return results
