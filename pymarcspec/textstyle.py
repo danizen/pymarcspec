@@ -1,6 +1,7 @@
 import attr
 import pymarc
 
+
 class BaseTextStyle:
     def field_text(self, field_or_text):
         return field_or_text
