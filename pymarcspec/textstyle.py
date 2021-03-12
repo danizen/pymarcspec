@@ -8,7 +8,7 @@ class BaseTextStyle:
     def subfield_text(self, values):
         return values
 
-    def join(self, results):
+    def fields_join(self, results):
         return results
 
 
@@ -33,3 +33,9 @@ class TextStyle(BaseTextStyle):
             return self.subfield_delimiter.join(values)
         else:
             return values
+
+    def fields_join(self, results):
+        if self.join_fields:
+            return self.field_delimiter.join(results)
+        else:
+            return results

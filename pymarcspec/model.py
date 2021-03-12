@@ -145,7 +145,7 @@ class MarcSpec:
                 results = [style.field_text(value) for value in results]
         elif isinstance(self.filter, IndicatorFilter):
             results = [
-                field.indicators[self.filter.indicator]
+                field.indicator1 if self.filter.indicator == 1 else field.indicator2
                 for field in results
             ]
         elif isinstance(self.filter, list):
@@ -163,5 +163,5 @@ class MarcSpec:
             if style:
                 results = [style.subfield_text(values) for values in results]
         if style:
-            return style.join(results)
+            return style.fields_join(results)
         return results
