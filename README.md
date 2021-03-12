@@ -21,9 +21,13 @@ parser = MarcSearchParser()
 spec = parser.parse('650$a$0')
 with open(sys.argv[1], 'rb') as f:
     for record in MARCReader(f):
-        subjects = spec.search(record, field_delimiter=':', subfield_delimiter=',')
+        subjects = spec.search(record)
         print(subjects)
 ```
+
+The `TextStyle` class governs how results are combined into strings (or not).
+You can subclass `TextStyle` or `BaseTextStyle` to do anything you want with combining
+the results, or you can handle it yourself. 
 
 There is also a `MarcSearch` object that memoizes each search expression, so that 
 you can conveniently run a number of different searches without creating several
@@ -32,18 +36,19 @@ parsed specs. For example:
 ```python
 import csv
 import sys
-from pymarcspec import MarcSearch
+from pymarcspec import MarcSearch, TextStyle
 from pymarc import MARCReader
 
 writer = csv.writer(sys.stdout, dialect='unix', quoting=csv.QUOTE_MINIMAL)
 writer.writerow(['id', 'title', 'subjects'])
 
-marcsearch = MarcSearch()
+style = TextStyle(field_delimiter=':')
+marcsearch = MarcSearch(style)
 with open(sys.argv[1], 'rb') as f:
     for record in MARCReader(f):
         control_id = marcsearch.search('100', record)
         title = marcsearch.search('245[0]$a-c', record)
-        subjects = marcsearch.search('650$a', record, field_delimiter=', ')
+        subjects = marcsearch.search('650$a', record)
         writer.writerow([control_id, title, subjects])        
 ```
 
